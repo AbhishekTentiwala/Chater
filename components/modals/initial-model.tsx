@@ -51,7 +51,7 @@ export const InitialModel=()=>{
 
     const onSubmit= async (values:z.infer<typeof formSchema>)=>{
         try {
-            await axios.post("/api/severs",values);
+            await axios.post("/api/servers",values);
 
             form.reset();
             router.refresh();
@@ -69,7 +69,7 @@ export const InitialModel=()=>{
     }
     return(
         <Dialog open>
-            <DialogContent className="bg-white text-black absolute top-10 left-10 p-0 overflow-hidden">
+            <DialogContent className="bg-white text-black absolute top-10 left-100 p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center font-bold"> 
                         Customise your server

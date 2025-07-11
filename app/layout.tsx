@@ -11,6 +11,7 @@ import {
   UserButton,
 } from '@clerk/nextjs'
 import { ThemeProvider } from "@/components/provider/theme-provider";
+import { ModalProvider } from "@/components/provider/modal-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,8 +46,9 @@ export default function RootLayout({
             storageKey="discord-theme"
             // disableTransitionOnChange
             >
-            {children}
-          </ThemeProvider>
+              <ModalProvider/>
+              {children}
+            </ThemeProvider>
           
         </body>
       </html>
