@@ -39,12 +39,14 @@ export const ServerHeader=({server,role}:ServerHeaderPrpos)=>{
                     <UserPlus2 className="h-4 w-4 ml-auto"/>
 
                 </DropdownMenuItem>)}
-                {isAdmin&&(<DropdownMenuItem className=" px-3 py-2 text-sm cursor-pointer">
+                {isAdmin&&(<DropdownMenuItem
+                onClick={()=>onOpen("editServer",{server:server})} className=" px-3 py-2 text-sm cursor-pointer">
                     Server Settings
                     <Settings className="h-4 w-4 ml-auto"/>
 
                 </DropdownMenuItem>)}
-                {isAdmin&&(<DropdownMenuItem className=" px-3 py-2 text-sm cursor-pointer">
+                {isAdmin&&(<DropdownMenuItem
+                onClick={()=>onOpen("members",{server:server})} className=" px-3 py-2 text-sm cursor-pointer">
                     Manage Members
                     <Users className="h-4 w-4 ml-auto"/>
 
