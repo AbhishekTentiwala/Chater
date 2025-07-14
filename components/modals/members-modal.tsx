@@ -1,8 +1,8 @@
 "use client";
 
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
-
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuPortal,DropdownMenuSeparator,DropdownMenuSub,DropdownMenuSubContent,DropdownMenuTrigger,DropdownMenuSubTrigger } from "@/components/ui/dropdown-menu";
 import { useModal } from "@/hooks/use-model-store"
 
 import { useState } from "react";
@@ -10,7 +10,10 @@ import axios from "axios";
 import { UserAvatar } from "@/components/ui/user.avatar";
 import { ServerWithMembersWithProfiles } from "@/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
+import qs from "query-string"
+import { Check, Gavel, Loader2, MoreVertical, Shield, ShieldAlert, ShieldCheck, ShieldQuestion } from "lucide-react";
+import { MemberRole } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 const roleIconMap={
     "Guest":null,
@@ -24,12 +27,58 @@ export const MembersModal = () => {
     const [LoadingId,setLoadingId]=useState("")
 
     const { server } = data as { server: ServerWithMembersWithProfiles };
-
+    const router=useRouter()
     const isModalOpen = isOpen && type === "members";
     const inviteUrl = `${origin}/invite/${server?.inviteCode}`
 
     const [isloading, setisloading] = useState(false)
+    const onKick=async(memberId:string)=>{
+        try {
+            setLoadingId(memberId);
+            const url=qs.stringifyUrl({
+                url:`/api/members/${memberId}`,
+                query:{
+                    serverid:server.id,
+                }
+            })
+            const response=await axios.delete(url)
+            router.refresh()
+            onOpen("members",{server:response.data})
+            
 
+        } catch (error) {
+            console.log(error);
+            
+        }
+        finally{
+            setLoadingId("");
+        }
+
+    }
+    const onRoleChane=async(memberId:string,role:MemberRole)=>{
+        try {
+            setLoadingId(memberId);
+            const url=qs.stringifyUrl({
+                url:`/api/members/${memberId}`,
+                query:{
+                    serverid:server.id,
+                }
+            })
+
+            const response=await axios.patch(url,{role});
+            router.refresh();
+            onOpen("members",{server:response.data})
+
+
+        } catch (error) {
+            console.log(error);
+            
+        }
+        finally{
+            setLoadingId("");
+        }
+
+    }
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -60,9 +109,43 @@ export const MembersModal = () => {
                             </div>
                             {server.profileId!==member.profileId && LoadingId!=member.id && 
                             <div className="ml-auto">
-                                Actions
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <MoreVertical className="h-4 w-4 text-zinc-600 mr-2"/>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuSub>
+                                            <DropdownMenuSubTrigger className="flex items-center">
+                                                <ShieldQuestion className="h-4 w-4 mr-2"/>
+                                                <span>Role</span>
+                                            </DropdownMenuSubTrigger>
+                                            <DropdownMenuPortal>
+                                                <DropdownMenuSubContent>
+                                                    <DropdownMenuItem onClick={()=>onRoleChane(member.id,"Guest")}>
+                                                        <Shield className="h-4 w-4 mr-2"/>
+                                                        Guest
+                                                        {member.role==="Guest"&&<Check className="h-4 w-4 ml-auto"/>}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                    onClick={()=>onRoleChane(member.id,"Moderater")}>
+                                                        <ShieldCheck className="h-4 w-4 mr-2"/>
+                                                        Moderator
+                                                        {member.role==="Moderater"&&<Check className="h-4 w-4 ml-auto"/>}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuSubContent>
+                                            </DropdownMenuPortal>
+                                        </DropdownMenuSub>
+                                        <DropdownMenuSeparator/>
+                                        <DropdownMenuItem 
+                                        onClick={()=>onKick(member.id)}>
+                                            <Gavel className="w-4 h-4 mr-2"/>
+                                            Kick
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
                              }
+                             {LoadingId===member.id && <Loader2 className="animate-spin text-zinc-500 ml-auto w-4 h-4"/>}
                         </div>
                     ))}
                 </ScrollArea>
