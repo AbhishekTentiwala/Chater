@@ -12,7 +12,7 @@ interface Chatheaderprops{
 const Chatheader = ({serverid,name,type,imageUrl}:Chatheaderprops) => {
     return ( 
         <div className="text-md font-semibold px-3 flex items-center h-12 border-neutral-200 dark:border-neutral-800">
-            <Mobiletoggle/>
+            <Mobiletoggle serverid={serverid}/>
             {type==="channel"&& (
                 <Hash className="w-5 h-5 text-zinc-500 mr-2 dark:text-zinc-400"/>
                 
