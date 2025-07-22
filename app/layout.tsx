@@ -12,6 +12,8 @@ import {
 } from '@clerk/nextjs'
 import { ThemeProvider } from "@/components/provider/theme-provider";
 import { ModalProvider } from "@/components/provider/modal-provider";
+import { SocketProvider } from "@/components/provider/socket-provider";
+import { QueryProvider } from "@/components/provider/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,8 +48,14 @@ export default function RootLayout({
             storageKey="discord-theme"
             // disableTransitionOnChange
             >
-              <ModalProvider/>
-              {children}
+              <SocketProvider>
+                <ModalProvider/>
+                <QueryProvider>
+                  {children}
+                </QueryProvider>
+                
+              </SocketProvider>
+              
             </ThemeProvider>
           
         </body>
