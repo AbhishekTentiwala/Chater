@@ -46,18 +46,18 @@ const ServerChannel = ({channel,server,role}:ServerChannelProps) => {
                 <div className="ml-auto flex items-center gap-x-2">
                     <ActionTooltip lebel="Edit">
                         <Edit
-                        onClick={(e)=>onAction(e,"edit-Channel")} className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-400 transition"/>
+                        onClick={(e)=>onAction(e,"edit-Channel")} className="block md:hidden md:group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-400 transition"/>
                     </ActionTooltip>
                     <ActionTooltip lebel="Delete">
                         <Trash 
-                        onClick={(e)=>onAction(e,"delete-Channel")} className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-400 transition"/>
+                        onClick={(e)=>onAction(e,"delete-Channel")} className="block md:hidden md:group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-400 transition"/>
                     </ActionTooltip>
                 </div>
             )}
             {channel.name==="general"&&(
                 <div className="ml-auto flex items-center gap-x-2">
                     <ActionTooltip lebel="not editable">
-                        <LockIcon className=" group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-400 transition"/>
+                        <LockIcon className="block md:hidden md:group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-400 transition"/>
                     </ActionTooltip>
                 </div>
 

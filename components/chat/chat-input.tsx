@@ -5,11 +5,11 @@ import axios from "axios";
 import qs from "query-string";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Smile } from "lucide-react";
+import { Plus, Smile, SendHorizonal } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-model-store";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 // New emoji-picker imports
 import Picker, { Theme } from "emoji-picker-react";
@@ -66,26 +66,34 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                         <FormItem>
                             <FormControl>
                                 <div className="relative p-4 pb-6">
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         onClick={() => onOpen("messageFile", { apiUrl, query })}
                                         className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
                                     >
                                         <Plus className="text-white dark:text-[#313338]" />
                                     </button>
-                                    <Input 
-                                        disabled={isLoading} 
-                                        className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
+                                    <textarea
+                                        disabled={isLoading}
+                                        className="px-14 py-4 pr-16 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200 resize-none min-h-[48px] max-h-[200px] w-full"
                                         placeholder={`Message ${type === 'conversation' ? name : '#' + name}`}
                                         {...field}
+                                        // onKeyDown={(e) => {
+                                        //     if (e.key === 'Enter' && !e.shiftKey) {
+                                        //         e.preventDefault();
+                                        //         if (field.value?.trim() && !isLoading) {
+                                        //             form.handleSubmit(onSubmit)();
+                                        //         }
+                                        //     }
+                                        // }}
                                     />
-                                    <div className="absolute top-7 right-8">
+                                    <div className="absolute top-7 right-8 flex items-center gap-2">
                                         <Popover>
                                             <PopoverTrigger type="button">
                                                 <Smile className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
                                             </PopoverTrigger>
-                                            <PopoverContent 
-                                                side="top" 
+                                            <PopoverContent
+                                                side="top"
                                                 sideOffset={40}
                                                 className="bg-transparent border-none shadow-none drop-shadow-none mb-8"
                                             >
@@ -97,6 +105,18 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                                                 />
                                             </PopoverContent>
                                         </Popover>
+                                        {/* <button
+                                            type="button"
+                                            onClick={() => form.handleSubmit(onSubmit)()}
+                                            disabled={isLoading || !field.value?.trim()}
+                                            className="h-[24px] w-[24px] bg-green-500 hover:bg-green-600 disabled:bg-zinc-400 disabled:cursor-not-allowed transition rounded-full p-1 flex items-center justify-center"
+                                            aria-label="Send message"
+                                        >
+                                            <Send className="text-white h-4 w-4" />
+                                        </button> */}
+                                        <Button onClick={() => form.handleSubmit(onSubmit)()} variant={"primary"} disabled={isLoading || !field.value?.trim()}>
+                                            <SendHorizonal className="text-white h-4 w-4" />
+                                        </Button>
                                     </div>
                                 </div>
                             </FormControl>

@@ -153,7 +153,7 @@ export const ChatItem = ({ id, content, currentMember, member, timestamp, fileUr
                         </div>
                     )}
                     {!fileUrl && !isEditing && (
-                        <p className={cn("text-sm text-zinc-600 dark:text-zinc-300",
+                        <p className={cn("text-sm text-zinc-600 dark:text-zinc-300 whitespace-pre-wrap",
                             deleted && "italic text-zinc-500 dark:text-zinc-400 text-xs mt-1"
                         )}>
                             {content}
@@ -201,7 +201,7 @@ export const ChatItem = ({ id, content, currentMember, member, timestamp, fileUr
             </div>
             {canDeleteMessage && (
                 <div
-                    className="hidden group-hover:flex items-center gap-x-2 absolute -top-2 p-1 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
+                    className="flex md:hidden md:group-hover:flex items-center gap-x-2 absolute top-2 p-1 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
                     {canEditMessage && (
                         <ActionTooltip lebel="Edit">
                             <Edit onClick={()=>setisEditing(true)} className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition " />

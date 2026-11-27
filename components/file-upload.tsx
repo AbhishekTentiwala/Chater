@@ -45,11 +45,12 @@ export const FileUpload=({onChange,value,endpoint}:FileUploadProps)=>{
                     src={value}
                     alt="Upload"
                     className="rounded-full"
+                    sizes="80px"
                 />
                 
                 <button onClick={()=>onChange("")} className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 sgadow-sm" type="button"><X className="h-4 w-4"/></button>
             </div>
-            <div className="w-80 h-60 flex flex-wrap">{value}</div>
+            {/* <div className="w-80 h-60 flex flex-wrap">{value}</div> */}
             
         </>
             
@@ -62,7 +63,7 @@ export const FileUpload=({onChange,value,endpoint}:FileUploadProps)=>{
         <><UploadDropzone
         endpoint ={endpoint}
         onClientUploadComplete={(res)=>{
-            onChange(res?.[0].url);
+            onChange(res?.[0].ufsUrl);
         }}
         onUploadError={(error:Error)=>{
             console.log(error)

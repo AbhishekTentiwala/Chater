@@ -8,20 +8,21 @@ import { ChannelType } from "@prisma/client"
 import { MediaRoom } from "@/components/media-room"
 
 interface ChannelidPageprops{
-    params:{
+    params:Promise<{
         serverid:string
         channelId:string
-    }
+    }>
 }
 
 const ChannelidPage = async({params}:ChannelidPageprops) => {
+    const { channelId } = await params;
     const profile=await currentProfile()
     if(!profile){
         return redirect('/sign-in')
     }
     const channel=await db.channel.findUnique({
         where:{
-            id: params.channelId
+            id: channelId
         }
     })
     if(!channel){
