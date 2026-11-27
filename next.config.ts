@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'standalone',
   webpack:(config)=>{
     config.externals.push({
       "utf-8-validate":"commonjs utf-8-validate",
@@ -12,7 +12,8 @@ const nextConfig: NextConfig = {
   },
   images:{
     remotePatterns:[
-      new URL("https://utfs.io/**")
+      new URL("https://utfs.io/**"),
+      new URL("https://*.ufs.sh/**")
     ]
   }
 };
