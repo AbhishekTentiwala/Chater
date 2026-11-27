@@ -2,8 +2,9 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function DELETE(req:Request,{params}:{params:{memberId:string}}){
+export async function DELETE(req:Request,{params}:{params: Promise<{memberId:string}>}){
     try {
+        const { memberId } = await params;
         const profile=await currentProfile()
         const {searchParams}=new URL(req.url);
         const serverId=searchParams.get("serverid")
@@ -13,7 +14,7 @@ export async function DELETE(req:Request,{params}:{params:{memberId:string}}){
         if(!serverId){
             return new NextResponse ("Serverid missing",{status:400})
         }
-        if(!params.memberId){
+        if(!memberId){
             return new NextResponse ("Memberrid missing",{status:400})
         }
         const server=await db.server.update({
@@ -24,7 +25,7 @@ export async function DELETE(req:Request,{params}:{params:{memberId:string}}){
             data:{
                 members:{
                     deleteMany:{
-                        id:params.memberId,
+                        id:memberId,
                         profileId:{
                             not:profile.id
                         }
@@ -51,8 +52,9 @@ export async function DELETE(req:Request,{params}:{params:{memberId:string}}){
      
 }
 
-export async function PATCH(req:Request,{params}:{params:{memberId:string}}){
+export async function PATCH(req:Request,{params}:{params: Promise<{memberId:string}>}){
     try {
+        const { memberId } = await params;
         const profile=await currentProfile()
         const {searchParams}=new URL(req.url);
         const {role}= await req.json()
@@ -63,7 +65,7 @@ export async function PATCH(req:Request,{params}:{params:{memberId:string}}){
         if(!serverId){
             return new NextResponse ("Serverid missing",{status:401})
         }
-        if(!params.memberId){
+        if(!memberId){
             return new NextResponse ("Memberrid missing",{status:400})
         }
 
@@ -76,7 +78,7 @@ export async function PATCH(req:Request,{params}:{params:{memberId:string}}){
                 members:{
                     update:{
                         where:{
-                            id:params.memberId,
+                            id:memberId,
                             profileId:{
                                 not:profile.id
                             }

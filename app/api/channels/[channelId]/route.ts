@@ -5,9 +5,10 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
     req:Request,
-    {params}:{params:{channelId:string}}
+    {params}:{params: Promise<{channelId:string}>}
 ){
     try {
+        const { channelId } = await params;
         const profile =await currentProfile()
         const {searchParams}=new URL(req.url)
 
@@ -19,7 +20,7 @@ export async function DELETE(
         if(!serverid){
             return new NextResponse("Server id missing",{status:400})
         }
-        if(!params.channelId){
+        if(!channelId){
             return new NextResponse("channel id missing",{status:400})
         }
 
@@ -38,7 +39,7 @@ export async function DELETE(
             data:{
                 channels:{
                     delete:{
-                        id:params.channelId,
+                        id:channelId,
                         name:{
                             not:"general"
                         }
@@ -57,9 +58,10 @@ export async function DELETE(
 
 export async function PATCH(
     req:Request,
-    {params}:{params:{channelId:string}}
+    {params}:{params: Promise<{channelId:string}>}
 ){
     try {
+        const { channelId } = await params;
         const profile =await currentProfile()
         const {name,type}=await req.json()
         const {searchParams}=new URL(req.url)
@@ -72,7 +74,7 @@ export async function PATCH(
         if(!serverid){
             return new NextResponse("Server id missing",{status:400})
         }
-        if(!params.channelId){
+        if(!channelId){
             return new NextResponse("channel id missing",{status:400})
         }
         if(name==='general'){
@@ -95,7 +97,7 @@ export async function PATCH(
                 channels:{
                     update:{
                         where:{
-                            id:params.channelId,
+                            id:channelId,
                             NOT:{
                                 name:"general",
                             },

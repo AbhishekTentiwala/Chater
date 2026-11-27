@@ -4,9 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
     req:Request,
-    {params}:{params:{serverid:string}}
+    {params}:{params: Promise<{serverid:string}>}
 ){
     try {
+        const { serverid } = await params;
         const profile=await currentProfile()
 
         if(!profile){
@@ -14,7 +15,7 @@ export async function DELETE(
         }
         const server =await db.server.delete({
             where:{
-                id:params.serverid,
+                id:serverid,
                 profileId:profile.id
             },
             
@@ -30,9 +31,10 @@ export async function DELETE(
 
 export async function PATCH(
     req:Request,
-    {params}:{params:{serverid:string}}
+    {params}:{params: Promise<{serverid:string}>}
 ){
     try {
+        const { serverid } = await params;
         const profile=await currentProfile()
         const {name,imageUrl} =await req.json()
 
@@ -41,7 +43,7 @@ export async function PATCH(
         }
         const server =await db.server.update({
             where:{
-                id:params.serverid,
+                id:serverid,
                 profileId:profile.id
             },
             data:{

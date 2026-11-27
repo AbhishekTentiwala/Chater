@@ -4,21 +4,22 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
     req:Request,
-    {params}:{params:{serverid:string}}
+    {params}:{params: Promise<{serverid:string}>}
 ){
     try {
+        const { serverid } = await params;
         const profile=await currentProfile()
 
 
         if(!profile){
             return new NextResponse("Unauthorised",{status:401})
         }
-        if(!params.serverid){
+        if(!serverid){
             return new NextResponse("Server Id missing",{status:400})
         }
         const server=await db.server.update({
             where:{
-                 id:params.serverid,
+                 id:serverid,
                  profileId:{
                     not:profile.id
                  },

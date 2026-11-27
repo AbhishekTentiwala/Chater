@@ -3,22 +3,23 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
 interface ServerIdPageprops{
-    params:{
-        serverid:string
-    }
+    params: Promise<{
+        serverid: string
+    }>
 }
 
-const ServerIdPage = async({params}:ServerIdPageprops) => {
-    const profile =await currentProfile()
+const ServerIdPage = async({params}: ServerIdPageprops) => {
+    const { serverid } = await params;
+    const profile = await currentProfile()
     if(!profile){
         return redirect("/sign-in")
     }
-    const server=await db.server.findUnique({
+    const server = await db.server.findUnique({
         where:{
-            id:params.serverid,
+            id: serverid,
             members:{
                 some:{
-                    profileId:profile.id
+                    profileId: profile.id
                 }
             }
         },
@@ -34,11 +35,11 @@ const ServerIdPage = async({params}:ServerIdPageprops) => {
         }
     })
 
-    const initialchannel=server?.channels[0];
+    const initialchannel = server?.channels[0];
     if(initialchannel?.name!=="general"){
         return null
     }
-    return ( redirect(`/servers/${params.serverid}/channels/${initialchannel?.id}`))
+    return ( redirect(`/servers/${serverid}/channels/${initialchannel?.id}`))
 }
  
 export default ServerIdPage;
